@@ -1,0 +1,144 @@
+import React, { useState, useRef, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import TextInput from "../ui/TextInput";
+import Button from "../ui/Button";
+// import ImageUpload from "../ui/ImageUpload";
+
+import { Wrapper, Container } from "../utils/styleUtil";
+import axios from "axios";
+
+function PostWritePage(props) {
+  const navigate = useNavigate();
+  const [postKey, setPostKey] = useState(null);
+  const titleRef = useRef("");
+  const contentRef = useRef("");
+  // const imgSubmitRef = useRef(null);
+
+  const postInfo = useLocation();
+
+  // useEffect(() => {
+  //   if (postInfo.state) {
+  //     const {
+  //       state: { category, postId },
+  //     } = postInfo;
+  //     postInfo &&
+  //       axios
+  //         .get(`http://localhost:8000/api/post/${category}/${postId}`)
+  //         .then((res) => {
+  //           const {
+  //             data: [post],
+  //           } = res;
+  //           // console.log(post);
+  //           titleRef.current = post.title;
+  //           contentRef.current = post.text;
+  //           setPostKey(postId);
+  //         });
+  //   }
+  // }, []);
+
+  const onTitleChange = (event) => {
+    titleRef.current = event.target.value;
+  };
+  const onContentChange = (event) => {
+    contentRef.current = event.target.value;
+  };
+
+  const onSubmit = async () => {
+    if (!titleRef.current) {
+      alert("제목을 입력해주세요.");
+      return;
+    }
+    if (!contentRef.current) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
+    if (postKey) {
+      // const {
+      //   state: { category, postId },
+      // } = postInfo;
+      // fetch("http://localhost:8000/api/post", {
+      //   method: "PUT",
+      //   headers: {
+      //     "Content-type": "application/json",
+      //   },
+      //   body: JSON.stringify([
+      //     {
+      //       user: 1,
+      //       category: 1,
+      //       title: titleRef.current,
+      //       content: contentRef.current,
+      //     },
+      //   ]),
+      // }).then(() => {
+      //   navigate(`/post/${category}/${postId}`);
+      // });
+    } else {
+      try {
+        // img upload
+
+        // post
+        const [data] = await (
+          await fetch("http://localhost:8000/api/post", {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify([
+              {
+                user: 1,
+                category: 1,
+                title: titleRef.current,
+                content: contentRef.current,
+              },
+            ]),
+          })
+        ).json();
+        navigate(`/post/1/${data}`);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+  return (
+    <Wrapper>
+      <Container>
+        <div>
+          <Button title="글 작성하기" onClick={onSubmit} />
+          <TextInput
+            height={20}
+            ref={titleRef}
+            onChange={onTitleChange}
+            // text={titleRef.current || ""}
+          />
+        </div>
+        <TextInput
+          height={480}
+          ref={contentRef}
+          onChange={onContentChange}
+          // text={contentRef.current || ""}
+        />
+        {/* <ImageUpload
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              // alignItems: "",
+            }}
+          >
+            <input type="file" accept=".jpg, .jpeg, .png" />
+          </div>
+          <div>
+            <button ref={imgSubmitRef}>Submit</button>
+          </div>
+        </ImageUpload> */}
+      </Container>
+    </Wrapper>
+  );
+}
+
+export default PostWritePage;
+	

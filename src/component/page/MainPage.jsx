@@ -20,7 +20,7 @@ function MainPage(props) {
       .then((res) => {
         const { data } = res;
         setData(data);
-        // console.log(data);
+        console.log(data.slice(0, 5));
       });
   }, [category, sortBy]);
 

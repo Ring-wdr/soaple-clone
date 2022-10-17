@@ -6,11 +6,13 @@ import Button from "../ui/Button";
 import { Wrapper, Container } from "../utils/styleUtil";
 import axios from "axios";
 import ImageTo from "../list/imageTo";
+import useImage from "../utils/useImage";
 
 function PostWritePage(props) {
   const navigate = useNavigate();
   // const titleRef = useRef("");
   // const contentRef = useRef("");
+  const { imgKeys, clearImg } = useImage();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -86,6 +88,22 @@ function PostWritePage(props) {
             ]),
           })
         ).json();
+        console.log(
+          JSON.stringify({
+            filesKeys: imgKeys,
+          })
+        );
+        clearImg();
+        await fetch(`http://localhost:8000/api/post/img/1/${data}`, {
+          method: "POST",
+
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            filesKeys: imgKeys,
+          }),
+        });
         navigate(`/post/1/${data}`);
       } catch (err) {
         console.error(err);

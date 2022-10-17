@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
+// import axios from "axios";
 import MainPage from "./component/page/MainPage";
 import PostWritePage from "./component/page/PostWritePage";
 import PostViewPage from "./component/page/PostViewPage";
@@ -12,6 +13,9 @@ const MainTitleText = styled.p`
   font-weight: bold;
   text-align: center;
 `;
+
+// axios.defaults = "http://localhost:8000";
+// axios.options.withCredentials = true;
 
 function App() {
   return (

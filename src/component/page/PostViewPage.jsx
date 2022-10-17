@@ -7,6 +7,7 @@ import TextInput from "../ui/TextInput";
 import Button from "../ui/Button";
 import { Wrapper, Container } from "../utils/styleUtil";
 import { ProfileDummy, ProfileInline } from "./ProfileComp";
+import LikeButton from "../ui/LikeButton";
 
 const PostContainter = styled.div`
   padding: 8px 16px;
@@ -103,7 +104,7 @@ function PostViewPage(props) {
         ] = res;
         // console.log(post);
         // setComm(reply);
-        // console.log(reply);
+        console.log(imgs);
         const [oneDepth, twoDepth] = reply;
         setComm(
           oneDepth.map((preply) => {
@@ -127,6 +128,7 @@ function PostViewPage(props) {
     datum.user === 1
       ? navigate("/post", { state: { category, postId } })
       : alert("작성자만 수정할 수 있습니다");
+
   const deleteAction = () =>
     datum.user === 1
       ? window.confirm("정말 삭제하시겠습니까?")
@@ -169,14 +171,26 @@ function PostViewPage(props) {
           <p></p>
           {datum.imgs
             ? datum.imgs.map((img) => (
-                <ContentImg key={img.post} src={img.path} alt={img.post} />
+                <ContentImg
+                  key={img.post}
+                  src={`http://localhost:3000/${img.path}`}
+                  alt={img.path}
+                />
               ))
             : null}
+
+          <img
+            style={{ maxWidth: "300px", maxHeight: "200px" }}
+            crossOrigin="anonymous"
+            src="http://localhost:8000/1664145313110.png"
+            alt=""
+          ></img>
 
           <ContentText>{datum.content}</ContentText>
           <div>
             <span>작성일 {datum.createAt}</span>
           </div>
+          <LikeButton></LikeButton>
         </PostContainter>
 
         <CommentLabel>댓글</CommentLabel>

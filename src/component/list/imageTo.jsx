@@ -1,10 +1,12 @@
 import axios from "axios";
 import React from "react";
 import { useState, useRef } from "react";
+import useImage from "../utils/useImage";
 
 const ImageTo = (props) => {
   // const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
+  const { updateImg } = useImage();
 
   const onSubmitImage = async (e) => {
     e.preventDefault();
@@ -14,7 +16,9 @@ const ImageTo = (props) => {
       const formData = new FormData();
       formData.append("img", uploadFile);
 
-      await axios({
+      const {
+        data: [fileId],
+      } = await axios({
         method: "post",
         url: "/api/file",
         data: formData,
@@ -22,6 +26,8 @@ const ImageTo = (props) => {
           "Content-Type": "multipart/form-data; charset=utf-8",
         },
       });
+      // console.log(fileId);
+      updateImg(fileId);
     }
   };
 

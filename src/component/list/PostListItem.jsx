@@ -41,7 +41,7 @@ function PostListItem(props) {
             width: "100px",
             objectFit: "cover",
           }}
-          src={post.filePath}
+          src={`${post.filePath}`}
           alt={post.title}
         ></img>
       </div>

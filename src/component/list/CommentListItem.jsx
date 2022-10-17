@@ -25,6 +25,9 @@ function CommentListItem({ comment }) {
   // const { comment } = props;
 
   const clickDelete = (event) => {
+    fetch(`http://localhost:8000/api/post/reply/${1}/${1}/2/${comment.id}`, {
+      method: "DELETE",
+    });
     console.log(comment.id);
   };
 

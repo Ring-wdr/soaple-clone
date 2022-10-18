@@ -173,6 +173,7 @@ function PostViewPage(props) {
             ? datum.imgs.map((img) => (
                 <ContentImg
                   key={img.post}
+                  // crossOrigin="anonymous"
                   src={`http://localhost:3000/${img.path}`}
                   alt={img.path}
                 />

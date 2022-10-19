@@ -36,7 +36,7 @@ function PostWritePage(props) {
       } = postInfo;
       postInfo &&
         axios
-          .get(`http://localhost:8000/api/post/${category}/${postId}`)
+          .get(`http://localhost:8080/api/post/${category}/${postId}`)
           .then((res) => {
             const {
               data: [post],
@@ -52,7 +52,7 @@ function PostWritePage(props) {
       const { category, postId } = postInfo.state;
       // console.log(category, postId);
       try {
-        await fetch(`http://localhost:8000/api/post/${category}/${postId}/1`, {
+        await fetch(`http://localhost:8080/api/post/${category}/${postId}/1`, {
           method: "PUT",
           headers: {
             "Content-type": "application/json",
@@ -71,7 +71,7 @@ function PostWritePage(props) {
     } else {
       try {
         const [data] = await (
-          await fetch("http://localhost:8000/api/post", {
+          await fetch("http://localhost:8080/api/post", {
             method: "POST",
             headers: {
               "Content-type": "application/json",
@@ -88,22 +88,22 @@ function PostWritePage(props) {
             ]),
           })
         ).json();
-        console.log(
-          JSON.stringify({
-            filesKeys: imgKeys,
-          })
-        );
-        clearImg();
-        await fetch(`http://localhost:8000/api/post/img/1/${data}`, {
-          method: "POST",
+        // console.log(
+        //   JSON.stringify({
+        //     filesKeys: imgKeys,
+        //   })
+        // );
+        // clearImg();
+        // await fetch(`http://localhost:8080/api/post/img/1/${data}`, {
+        //   method: "POST",
 
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            filesKeys: imgKeys,
-          }),
-        });
+        //   headers: {
+        //     "Content-type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     filesKeys: imgKeys,
+        //   }),
+        // });
         navigate(`/post/1/${data}`);
       } catch (err) {
         console.error(err);

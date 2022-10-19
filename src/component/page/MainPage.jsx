@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import PostList from "../list/PostList";
 import Button from "../ui/Button";
 // import data from "../../data.json";
@@ -8,19 +9,20 @@ import Button from "../ui/Button";
 import { Wrapper, Container } from "../utils/styleUtil";
 
 function MainPage(props) {
-  const {} = props;
   const [datas, setData] = useState([]);
   const [category, setCategory] = useState(1);
   const [sortBy, setSortBy] = useState("recent");
+  const [keyword, setKeyword] = useState('')
   const navigate = useNavigate();
+  // console.log(process.env.REACT_APP_HOST)
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/api/post/${category}?sortBy=${sortBy}`)
+      .get(`http://localhost:8080/api/post/${category}?sortBy=${sortBy}`)
       .then((res) => {
         const { data } = res;
         setData(data);
-        console.log(data.slice(0, 5));
+        // console.log(data);
       });
   }, [category, sortBy]);
 
@@ -30,9 +32,31 @@ function MainPage(props) {
   const sortChange = (event) => {
     setSortBy(event.target.value);
   };
+  const keywordChage = (event) => {
+    setKeyword(event.target.value)
+  }
 
+  const searchKeyword = () =>{
+    axios
+      .get(`http://localhost:8080/api/post/search/?keyword=${keyword.split(' ').join('.')}`)
+      .then((res) => {
+        const { data } = res;
+        if (data.length < 1){
+          // alert('검색 결과가 없어용')
+          toast.error('검색 결과가 없어용', {
+            position: toast.POSITION.TOP_CENTER
+          })
+          return
+        }
+        setData(data);
+      });
+  }
   return (
     <Wrapper>
+    <div>
+      <input type='text' value={keyword} onChange={keywordChage}/>
+      <button className='btn-primary' onClick={searchKeyword}>검색</button>
+    </div>
       <Container>
         <div
           style={{
@@ -47,7 +71,7 @@ function MainPage(props) {
 
           <select onChange={sortChange}>
             <option value={"recent"}>최신</option>
-            <option value={"boast"}>인기</option>
+            <option value={"popular"}>인기</option>
           </select>
           <Button
             title="글 작성하기"

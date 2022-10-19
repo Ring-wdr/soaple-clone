@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -51,10 +51,12 @@ function PostViewPage(props) {
     replyCnt: 0,
   });
   const [comm, setComm] = useState([]);
-  const commentRef = useRef();
+  // const commentRef ();
+  const [comment, setComment] = useState('')
 
   const commentChange = (event) => {
-    commentRef.current = event.target.value;
+    // commentRef.current = event.target.value;
+    setComment(event.target.value)
   };
 
   const onUpdateDel = () => {
@@ -62,11 +64,11 @@ function PostViewPage(props) {
   };
 
   const commentSubmit = async (event) => {
-    if (commentRef)
+    if (comment)
       try {
         // await (
         await fetch(
-          `http://localhost:8000/api/post/reply/${category}/${postId}/2`,
+          `http://localhost:8080/api/post/reply/${category}/${postId}/2`,
           {
             method: "POST",
             headers: {
@@ -75,13 +77,14 @@ function PostViewPage(props) {
             body: JSON.stringify([
               {
                 pid: null,
-                content: commentRef.current,
+                content: comment,
               },
             ]),
           }
         );
         // navigate(`/post/1/${postId}`);
-        commentRef.current = "";
+        // commentRef.current = "";
+        setComment('')
         window.location.reload();
       } catch (err) {
         console.error(err);
@@ -90,9 +93,9 @@ function PostViewPage(props) {
 
   useEffect(() => {
     Promise.all([
-      axios.get(`http://localhost:8000/api/post/${category}/${postId}`),
-      axios.get(`http://localhost:8000/api/post/img/${category}/${postId}`),
-      axios.get(`http://localhost:8000/api/post/reply/${category}/${postId}`),
+      axios.get(`http://localhost:8080/api/post/${category}/${postId}`),
+      axios.get(`http://localhost:8080/api/post/img/${category}/${postId}`),
+      axios.get(`http://localhost:8080/api/post/reply/${category}/${postId}`),
     ])
       .then((res) => {
         const [
@@ -104,7 +107,7 @@ function PostViewPage(props) {
         ] = res;
         // console.log(post);
         // setComm(reply);
-        console.log(imgs);
+        // console.log(imgs);
         const [oneDepth, twoDepth] = reply;
         setComm(
           oneDepth.map((preply) => {
@@ -133,7 +136,7 @@ function PostViewPage(props) {
     datum.user === 1
       ? window.confirm("정말 삭제하시겠습니까?")
         ? axios
-            .delete(`http://localhost:8000/api/post/${category}/${postId}/1`)
+            .delete(`http://localhost:8080/api/post/${category}/${postId}/1`)
             .then((res) => {
               alert(`게시글이 삭제되었습니다.`);
               navigate("/");
@@ -183,7 +186,7 @@ function PostViewPage(props) {
           <img
             style={{ maxWidth: "300px", maxHeight: "200px" }}
             crossOrigin="anonymous"
-            src="http://localhost:8000/1664145313110.png"
+            src="http://localhost:8080/1664145313110.png"
             alt=""
           ></img>
 
@@ -191,13 +194,13 @@ function PostViewPage(props) {
           <div>
             <span>작성일 {datum.createAt}</span>
           </div>
-          <LikeButton></LikeButton>
+          <LikeButton/>
         </PostContainter>
 
         <CommentLabel>댓글</CommentLabel>
-        <CommentList comments={comm || []} />
+        <CommentList comments={comm || []} category={category} postId={postId}/>
 
-        <TextInput height={40} ref={commentRef} onChange={commentChange} />
+        <TextInput height={40} value={comment} onChange={commentChange} />
         <Button title="댓글 작성하기" onClick={commentSubmit} />
       </Container>
     </Wrapper>

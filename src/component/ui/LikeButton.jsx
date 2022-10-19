@@ -1,7 +1,7 @@
 function LikeButton() {
   return (
-    <button class="w-btn w-btn-indigo" type="button">
-      BUTTON
+    <button className="w-btn w-btn-indigo" type="button">
+      조아요
     </button>
   );
 }

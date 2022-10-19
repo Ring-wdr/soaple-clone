@@ -21,19 +21,21 @@ const ContentText = styled.p`
   font-size: 14px;
 `;
 
-function CommentListItem({ comment }) {
+function CommentListItem({ comment, appendReply }) {
   // const { comment } = props;
 
   const clickDelete = (event) => {
-    fetch(`http://localhost:8000/api/post/reply/${1}/${1}/2/${comment.id}`, {
-      method: "DELETE",
-    });
+    // fetch(`http://localhost:8000/api/post/reply/${1}/${1}/2/${comment.id}`, {
+    //   method: "DELETE",
+    // });
     console.log(comment.id);
   };
 
   return (
     <>
-      <Wrapper key={comment.id} pid={comment.pid}>
+      <Wrapper key={comment.id} pid={comment.pid} onClick={()=>{
+        appendReply(comment.id)
+      }}>
         <ContentText>{comment.nickname}</ContentText>
         <ContentText>{comment.content}</ContentText>
         {comment.pid ? null : <button>대댓글 달기</button>}

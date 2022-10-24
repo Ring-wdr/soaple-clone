@@ -1,40 +1,34 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useRef, useState } from "react";
+// import styled from "styled-components";
 import Button from "../ui/Button";
 import TextInput from "../ui/TextInput";
+import { usePost } from "../utils/usePost";
 import CommentListItem from "./CommentListItem";
 import ReplyList from "./ReplyList";
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  & > * {
-    :not(:last-child) {
-      margin-bottom: 16px;
-    }
-  }
-`;
+// const Wrapper = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+//   justify-content: center;
+//   & > * {
+//     :not(:last-child) {
+//       margin-bottom: 16px;
+//     }
+//   }
+// `;
 
-function CommentList({comments, category, postId}) {
-  // const { comments } = props;
-  const [reReply, setReReply] = useState([false, null]);
-  const [repComment, setRepComment] = useState('')
-  // const [pid, setPid] = useState(null)
+function CommentList({comments}) {
+  const [isReply, setReply] = useState({})
+  const {category, postId} = usePost();
+  const replyRef = useRef();
 
-  const commentChange = (event) => {
-    setRepComment(event.target.value)
-  };
 
-  const appendReply = (pid) => {
-    // console.log(e.target)
-    console.log(reReply)
-    setReReply([!reReply[0], pid])
+  const toggleReply = (pid) => {
+    setReply(comments.reduce((s, {id})=>({...s, [id]: id === pid ? true : false}),{}))
   }
   
   const commentSubmit = async (event) => {
-    if (repComment)
       try {
         // await (
         await fetch(
@@ -46,26 +40,26 @@ function CommentList({comments, category, postId}) {
             },
             body: JSON.stringify([
               {
-                pid: reReply[1],
-                content: repComment,
+                pid: Object.entries(isReply).filter(value=>value[1])[0][0],
+                content: replyRef.current.value,
               },
             ]),
           }
         );
-        setRepComment('')
         window.location.reload();
       } catch (err) {
         console.error(err);
       }
+      
   };
 
   return (
     <>
       {comments.map((comment, idx) => (
         <div key={idx}>
-          <CommentListItem key={comment.id} comment={comment} appendReply={appendReply}/>
-          {reReply[0] && reReply[1] === comment.id ?  <>
-            <TextInput height={40} value={repComment} onChange={commentChange} />
+          <CommentListItem key={comment.id} comment={comment} toggleReply={toggleReply}/>
+          {isReply[comment.id] ? <>
+            <TextInput height={40} ref={replyRef} />
             <Button title="댓글 작성하기" onClick={commentSubmit} />
           </> : null}
           <ReplyList comment={comment} />

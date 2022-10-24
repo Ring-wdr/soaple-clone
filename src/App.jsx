@@ -8,6 +8,7 @@ import PostViewPage from "./component/page/PostViewPage";
 import Header from "./component/list/Header";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PostProvider } from "./component/utils/usePost";
 // import { UserContext } from "./context/UserContext";
 
 const MainTitleText = styled.p`
@@ -27,7 +28,12 @@ function App() {
       <MainTitleText>김밥을 마는 중</MainTitleText>
       <Routes>
         <Route index element={<MainPage />} />
-        <Route path="post/:category/:postId" element={<PostViewPage />} />
+        <Route path="post/:category/:postId"
+          element={
+          <PostProvider>
+            <PostViewPage />
+          </PostProvider>        
+          } />
         <Route path="post" element={<PostWritePage />} />
       </Routes>
     </BrowserRouter>

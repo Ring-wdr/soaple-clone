@@ -8,7 +8,9 @@ import Button from "../ui/Button";
 import { Wrapper, Container } from "../utils/styleUtil";
 import { ProfileDummy, ProfileInline } from "./ProfileComp";
 import LikeButton from "../ui/LikeButton";
-
+import dayjs from "dayjs";
+import ImageList from "../list/ImageList";
+import { usePost } from "../utils/usePost";
 const PostContainter = styled.div`
   padding: 8px 16px;
   border: 1px solid grey;
@@ -27,11 +29,6 @@ const ContentText = styled.p`
   word-break: break-all;
 `;
 
-const ContentImg = styled.img`
-  width: 50%;
-  height: 50%;
-`;
-
 const CommentLabel = styled.p`
   font-size: 16px;
   font-weight: 500;
@@ -41,7 +38,8 @@ function PostViewPage(props) {
   const navigate = useNavigate();
   const { category, postId } = useParams();
   const [updateDel, setUpdateDel] = useState(false);
-
+  const { setCategory, setPostId } = usePost();
+  // console.log(import.meta.env)
   // const post = data.find((item) => item.id == postId);
   const [datum, setDatum] = useState({
     title: "",
@@ -91,11 +89,15 @@ function PostViewPage(props) {
       }
   };
 
-  useEffect(() => {
+  useEffect(() => {  
+    setCategory(category)
+    setPostId(postId)
+    const controller = new AbortController();
+    const { signal } = controller;
     Promise.all([
-      axios.get(`http://localhost:8080/api/post/${category}/${postId}`),
-      axios.get(`http://localhost:8080/api/post/img/${category}/${postId}`),
-      axios.get(`http://localhost:8080/api/post/reply/${category}/${postId}`),
+      axios.get(`http://localhost:8080/api/post/${category}/${postId}`,{signal}),
+      axios.get(`http://localhost:8080/api/post/img/${category}/${postId}`,{signal}),
+      axios.get(`http://localhost:8080/api/post/reply/${category}/${postId}`,{signal}),
     ])
       .then((res) => {
         const [
@@ -124,7 +126,9 @@ function PostViewPage(props) {
           replyCnt: oneDepth.length + twoDepth.length,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
+
+    return () => controller.abort();
   }, []);
 
   const modifyAction = () =>
@@ -168,31 +172,17 @@ function PostViewPage(props) {
 
           <ProfileInline>
             <ProfileDummy></ProfileDummy>
-            <p>{datum.nickname}</p>
-            <p>댓글: {datum.replyCnt}</p>
+            <p>{datum.nickname} || </p>
+            <p>댓글: {datum.replyCnt} || </p>
+            <p>좋아요: {datum.likesCnt}</p>
           </ProfileInline>
           <p></p>
-          {datum.imgs
-            ? datum.imgs.map((img) => (
-                <ContentImg
-                  key={img.post}
-                  // crossOrigin="anonymous"
-                  src={`http://localhost:3000/${img.path}`}
-                  alt={img.path}
-                />
-              ))
-            : null}
+          {datum.imgs ? <ImageList imgs={datum.imgs}/> : null}
 
-          <img
-            style={{ maxWidth: "300px", maxHeight: "200px" }}
-            crossOrigin="anonymous"
-            src="http://localhost:8080/1664145313110.png"
-            alt=""
-          ></img>
 
           <ContentText>{datum.content}</ContentText>
           <div>
-            <span>작성일 {datum.createAt}</span>
+            <span>작성일 {dayjs(datum.createAt).format('YYYY-MM-DD')}</span>
           </div>
           <LikeButton/>
         </PostContainter>

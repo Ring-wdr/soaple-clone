@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import PostList from "../list/PostList";
@@ -12,7 +12,8 @@ function MainPage(props) {
   const [datas, setData] = useState([]);
   const [category, setCategory] = useState(1);
   const [sortBy, setSortBy] = useState("recent");
-  const [keyword, setKeyword] = useState('')
+  // const [keyword, setKeyword] = useState('')
+  const keyWordRef = useRef();
   const navigate = useNavigate();
   // console.log(process.env.REACT_APP_HOST)
 
@@ -32,13 +33,14 @@ function MainPage(props) {
   const sortChange = (event) => {
     setSortBy(event.target.value);
   };
-  const keywordChage = (event) => {
-    setKeyword(event.target.value)
-  }
+  // const keywordChage = (event) => {
+  //   setKeyword(event.target.value)
+  // }
 
   const searchKeyword = () =>{
+    keyWordRef.current.value &&
     axios
-      .get(`http://localhost:8080/api/post/search/?keyword=${keyword.split(' ').join('.')}`)
+      .get(`http://localhost:8080/api/post/search/?keyword=${keyWordRef.current.value.split(' ').join('.')}`)
       .then((res) => {
         const { data } = res;
         if (data.length < 1){
@@ -54,7 +56,8 @@ function MainPage(props) {
   return (
     <Wrapper>
     <div>
-      <input type='text' value={keyword} onChange={keywordChage}/>
+      <input type='text' ref={keyWordRef} onKeyUp={()=>window.event.keyCode==13 && searchKeyword()}/>
+      {/* <input type='text' value={keyword} onChange={keywordChage}/> */}
       <button className='btn-primary' onClick={searchKeyword}>검색</button>
     </div>
       <Container>
@@ -76,7 +79,7 @@ function MainPage(props) {
           <Button
             title="글 작성하기"
             onClick={() => {
-              navigate("/post");
+              navigate("/post", {state:{category}});
             }}
           />
         </div>

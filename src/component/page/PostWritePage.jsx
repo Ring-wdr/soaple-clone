@@ -147,7 +147,7 @@ function PostWritePage(props) {
         </select>
         <div>
           <Button title="글 작성하기" onClick={onSubmit} />
-          <TextInput height={20} ref={titleRef}/>
+          <TextInput height={60} ref={titleRef}/>
         </div>
         {imgs.length > 0 ?
           <ImageList imgs={imgs} isWrite={true} imgDelete={imgDelete}/> 

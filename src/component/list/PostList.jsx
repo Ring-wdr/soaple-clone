@@ -20,7 +20,7 @@ function PostList({ posts, category, onClickItem }) {
 
   return (
     <Wrapper>
-      {posts.map((post, idx) => (
+      {posts.map((post) => (
         <PostListItem
           key={post.id}
           category={category}

@@ -25,7 +25,7 @@ const ContentText = styled.p`
 `;
 
 function CommentListItem({ comment, toggleReply }) {
-  const [hidden, setHidden] = useState(false);
+  const [hidden, setHidden] = useState(true);
   const {category, postId} = usePost();
   const modifyRef = useRef();
 

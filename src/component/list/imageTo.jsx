@@ -1,9 +1,8 @@
 import axios from "axios";
 import React from "react";
-import { useState, useRef } from "react";
-
+import { useRef } from "react";
+import "remixicon/fonts/remixicon.css";
 const ImageTo = ({setImgs}) => {
-  // const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
 
   const onSubmitImage = async (e) => {
@@ -32,15 +31,30 @@ const ImageTo = ({setImgs}) => {
   };
 
   return (
-    <form>
+    <div className="attachedFileBtn py-3 border-t">
+      <label htmlFor="file">
+        <div className="uploadBtn flex items-center justify-center cursor-pointer">
+          <i className="ri-camera-fill text-3xl"></i>
+        </div>
+      </label>
       <input
         type="file"
+        id="file"
         ref={imgRef}
         accept="image/*"
         onChange={onSubmitImage}
+        hidden
       ></input>
-    </form>
+    </div>
   );
+    // <form>
+    //   <input
+    //     type="file"
+    //     ref={imgRef}
+    //     accept="image/*"
+    //     onChange={onSubmitImage}
+    //   ></input>
+    // </form>
 };
 
 export default ImageTo;

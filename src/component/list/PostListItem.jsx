@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { ProfileDummy, ProfileInline } from "../page/ProfileComp";
+import dayjs from "dayjs";
 
 const Wrapper = styled.div`
   width: calc(100% - 32px);
@@ -28,11 +29,14 @@ function PostListItem(props) {
   return (
     <Wrapper onClick={onClick}>
       <div>
-        <TitleText>{post.title}</TitleText>
+        <TitleText className="mb-5">{post.title}</TitleText>
         <ProfileInline>
           <ProfileDummy></ProfileDummy>
           <span>{post.nickname}</span>
         </ProfileInline>
+        <div>
+          <p>{dayjs(post.createAt).format('YYYY-MM-DD HH시 mm분')}</p>
+        </div>
       </div>
       <div>
         <img
@@ -41,6 +45,7 @@ function PostListItem(props) {
             width: "100px",
             objectFit: "cover",
           }}
+          className='truncate ...'
           src={`${post.filePath}`}
           alt={post.title}
         ></img>

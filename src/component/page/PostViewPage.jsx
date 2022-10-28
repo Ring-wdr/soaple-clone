@@ -152,23 +152,29 @@ function PostViewPage(props) {
   return (
     <Wrapper>
       <Container>
-        {updateDel ? (
+        <div className="flex justify-between">
           <div>
-            <button onClick={modifyAction}>수정</button>{" "}
-            <button onClick={deleteAction}>삭제</button>{" "}
-            <button onClick={onUpdateDel}>원래대로</button>
+            <Button
+              title="뒤로 가기"
+              onClick={() => {
+                navigate("/");
+              }}
+            />
           </div>
-        ) : (
-          <button onClick={onUpdateDel}>...</button>
-        )}
-        <Button
-          title="뒤로 가기"
-          onClick={() => {
-            navigate("/");
-          }}
-        />
-        <PostContainter>
-          <TitleText>{datum.title}</TitleText>
+          {updateDel ? (
+            <div className="space-x-3">
+              <button onClick={modifyAction}>수정</button>
+              <button onClick={deleteAction}>삭제</button>
+              <button onClick={onUpdateDel}>원래대로</button>
+            </div>
+          ) : (
+            <div>
+              <button onClick={onUpdateDel}>...</button>
+            </div>
+          )}
+        </div>
+        <PostContainter className="bg-gradient-to-r from-gray-300 to-blue-100">
+          <TitleText className="mb-5">{datum.title}</TitleText>
 
           <ProfileInline>
             <ProfileDummy></ProfileDummy>
@@ -176,14 +182,13 @@ function PostViewPage(props) {
             <p>댓글: {datum.replyCnt} || </p>
             <p>좋아요: {datum.likesCnt}</p>
           </ProfileInline>
-          <p></p>
+          <p>          
+            <span>작성일 {dayjs(datum.createAt).format('YYYY-MM-DD')}</span>
+          </p>
           {datum.imgs ? <ImageList imgs={datum.imgs}/> : null}
 
 
           <ContentText>{datum.content}</ContentText>
-          <div>
-            <span>작성일 {dayjs(datum.createAt).format('YYYY-MM-DD')}</span>
-          </div>
           <LikeButton/>
         </PostContainter>
 

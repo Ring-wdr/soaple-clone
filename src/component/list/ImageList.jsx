@@ -21,7 +21,7 @@ const ImageList = ({imgs, isWrite, imgDelete}) => {
  return (
     <Wrapper>
     {imgs.map((img) => !img.isDel ? (
-        <ImgWrapper 
+        <ImgWrapper className="relative"
             key={`${img.file}thImg`}>
             <ContentImg
             crossOrigin="anonymous"
@@ -29,7 +29,7 @@ const ImageList = ({imgs, isWrite, imgDelete}) => {
             // src="http://localhost:8080/166631790727783fd9b09-9121-49fb-8422-aecc86ddad0c.png"
             alt={img.path}
             />
-            {isWrite ? <ImgKeyButton key={img.file} onClick={imgDelete} value={img.file}>삭제</ImgKeyButton> : null}
+            {isWrite ? <button className="absolute top-5 right-5 bg-white rounded p-2" key={img.file} onClick={imgDelete} value={img.file}>삭제</button> : null}
         </ImgWrapper>
     ) : null)}
     </Wrapper>

@@ -33,10 +33,6 @@ function MainPage(props) {
   const sortChange = (event) => {
     setSortBy(event.target.value);
   };
-  // const keywordChage = (event) => {
-  //   setKeyword(event.target.value)
-  // }
-
   const searchKeyword = () =>{
     keyWordRef.current.value &&
     axios
@@ -55,11 +51,10 @@ function MainPage(props) {
   }
   return (
     <Wrapper>
-    <div>
-      <input type='text' ref={keyWordRef} onKeyUp={()=>window.event.keyCode==13 && searchKeyword()}/>
-      {/* <input type='text' value={keyword} onChange={keywordChage}/> */}
-      <button className='btn-primary' onClick={searchKeyword}>검색</button>
-    </div>
+      <div className="flex justify-center items-center w-4/5">
+        <input className='shadow-xl mr-5 border-solid border-2' type='text' ref={keyWordRef} onKeyUp={()=>window.event.keyCode==13 && searchKeyword()}/>
+        <button className='btn-primary shadow-lg' onClick={searchKeyword}>검색</button>
+      </div>
       <Container>
         <div
           style={{
@@ -67,15 +62,17 @@ function MainPage(props) {
             justifyContent: "space-between",
           }}
         >
-          <select onChange={categoryChange}>
-            <option value={1}>자유</option>
-            <option value={2}>자랑</option>
-          </select>
+          <div>
+            <select className='shadow-inner border-solid border-2 rounded-xl' onChange={categoryChange}>
+              <option value={1}>자유</option>
+              <option value={2}>자랑</option>
+            </select>
 
-          <select onChange={sortChange}>
-            <option value={"recent"}>최신</option>
-            <option value={"popular"}>인기</option>
-          </select>
+            <select className="shadow-inner border-solid border-2 rounded-xl" onChange={sortChange}>
+              <option value={"recent"}>최신</option>
+              <option value={"popular"}>인기</option>
+            </select>
+          </div>
           <Button
             title="글 작성하기"
             onClick={() => {

@@ -19,7 +19,8 @@ function ReplyList(props) {
   return (
     <Wrapper>
       {comment.reply.map((comment, idx) => (
-        <CommentListItem key={comment.id} comment={comment} />
+          <CommentListItem key={comment.id} comment={comment} />
+        
       ))}
     </Wrapper>
   );
